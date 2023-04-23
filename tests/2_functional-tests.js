@@ -50,9 +50,18 @@ suite("Functional Tests", function () {
     });
     // #4
     test('Send {surname: "da Verrazzano"}', function (done) {
-      assert.fail();
-
-      done();
+      chai
+        .request(server)
+        .keepOpen()
+        .put("/travellers")
+        .send({ surname: "da Verrazzano" })
+        .end((error, response) => {
+          assert.equal(response.status, 200);
+          assert.equal(response.type, "application/json");
+          assert.equal(response.body.name, "Giovanni");
+          assert.equal(response.body.surname, "da Verrazzano");
+          done();
+        });
     });
   });
 });
